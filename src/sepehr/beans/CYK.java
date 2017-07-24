@@ -1,5 +1,7 @@
 package sepehr.beans;
 
+import java.util.ArrayList;
+
 /**
  * Created by Sepehr on 7/24/2017.
  */
@@ -17,5 +19,14 @@ public class CYK {
 
     public void setGrammar(String grammar) {
         this.grammar = grammar;
+    }
+
+    public String[][] createTable (String input, ArrayList<Production> productions){
+
+        String[][] table = new String[input.length()][input.length()];
+
+
+
+        return table;
     }
 }

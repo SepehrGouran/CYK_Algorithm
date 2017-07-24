@@ -1,3 +1,9 @@
+import sepehr.beans.CYK;
+import sepehr.beans.ContextFreeGrammarParser;
+import sepehr.beans.Production;
+
+import java.util.ArrayList;
+
 /**
  * Created by Sepehr on 7/24/2017.
  */
@@ -5,11 +11,21 @@ public class Main {
 
     public static void main(String[] args) {
 
-        int[][] table = new int[5][5];
+        String input = "baaba";
 
-        for (int i = 0; i < 5; i++) {
-            for (int j = 0; j < 5; j++) {
-                System.out.print(table[i][j] + "\t");
+        int[][] table = new int[input.length()][input.length()];
+
+        CYK cyk = new CYK("S->AB|BA*A->a");
+
+        ArrayList<Production> productions = ContextFreeGrammarParser.parseGrammar(cyk.getGrammar());
+        for (int i = 0; i < productions.size(); i++) {
+            System.out.println(productions.get(i).toString());
+        }
+
+        String[][] triangleTable = cyk.createTable(input, productions);
+        for (int i = 0; i < input.length(); i++) {
+            for (int j = 0; j < input.length(); j++) {
+                System.out.print(triangleTable[i][j] + "\t");
             }
             System.out.println("");
         }
