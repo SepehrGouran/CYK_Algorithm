@@ -16,6 +16,7 @@ public class Main {
 
         int[][] table = new int[input.length()][input.length()];
 
+        // Use '|' to add expression and '*' to separate productions
         CYK cyk = new CYK("S->AB|BC*A->BA|a*B->CC|b*C->AB|a");
 
         ArrayList<Production> productions = ContextFreeGrammarParser.parseGrammar(cyk.getGrammar());
