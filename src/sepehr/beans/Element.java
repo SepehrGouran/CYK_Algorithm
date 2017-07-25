@@ -9,7 +9,7 @@ public class Element {
 
     private int rowIndex;
     private int columnIndex;
-    private String productions;
+    private ArrayList<Production> productions;
 
     public Element(int rowIndex, int columnIndex) {
         this.rowIndex = rowIndex;
@@ -32,16 +32,16 @@ public class Element {
         this.columnIndex = columnIndex;
     }
 
-    public String getProductions() {
+    public ArrayList<Production> getProductions() {
         return productions;
     }
 
-    public void setProductions(String productions) {
-        this.productions = productions.trim();
+    public void setProductions(ArrayList<Production> productions) {
+        this.productions = productions;
     }
 
     @Override
     public String toString() {
-        return "index: " + rowIndex + " " + columnIndex + " P: " + productions;
+        return "index: " + rowIndex + " " + columnIndex + " P: " + productions.toString();
     }
 }

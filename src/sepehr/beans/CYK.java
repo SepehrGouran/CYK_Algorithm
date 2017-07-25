@@ -35,7 +35,7 @@ public class CYK {
 
             for (int column = 0; column < n-row; column++) {
 
-                ArrayList<String> acceptedProductions = new ArrayList<>();
+                ArrayList<Production> acceptedProductions = new ArrayList<>();
                 char c = chars[column];
 
                 // X ij = X ik . X k+1 j
@@ -51,28 +51,25 @@ public class CYK {
 
                         if (terminal == c) {
 
-                            acceptedProductions.add(production.getExpression());
+                            acceptedProductions.add(production);
                         }
                     }
-
-                    String accepted = acceptedProductions.toString();
-                    table[row][column].setProductions(accepted);
 
                 } else {
 
                     //System.err.println(x);
-                    for (int k = col; k < col+r; k++) {
-                        String res = x.product(new X(col, k), new X(k+1, r), table, productions);
-                        if (res.replace("null", " ").trim().length() != 0) {
-                            acceptedProductions.add(res.replace("null", " ").trim());
+                    for (int k = x.getI(); k < x.getJ(); k++) {
+                        ArrayList<Production> res = x.product(new X(col, k), new X(k+1, r), table, productions);
+                        if (res != null) {
+                            acceptedProductions.addAll(res);
+                        } else {
+                            acceptedProductions.add(new Production(" ", " "));
                         }
                     }
 
-                    String accepted = acceptedProductions.toString();
-
-                    table[row][column].setProductions(accepted);
-
                 }
+
+                table[row][column].setProductions(acceptedProductions);
             }
         }
 

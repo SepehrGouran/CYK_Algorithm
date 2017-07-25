@@ -26,9 +26,17 @@ public class Main {
         Element[][] triangleTable = cyk.createTable(input, productions);
         for (int i = 0; i < input.length(); i++) {
             for (int j = 0; j < input.length(); j++) {
-                System.out.printf("%35s", triangleTable[i][j] + "\t");
+                System.out.printf("%10s", triangleTable[i][j] + "\t\n");
             }
             System.out.println("");
+        }
+
+        ArrayList<Production> lastElement = triangleTable[triangleTable.length-1][0].getProductions();
+        if (lastElement.toString().equalsIgnoreCase("[]")) {
+            System.err.println("The language is not accepted");
+        } else {
+            System.err.println("The language is accepted " + lastElement.toString());
+
         }
 
     }
