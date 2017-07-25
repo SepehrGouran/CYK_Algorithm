@@ -30,9 +30,8 @@ public class CYK {
         char[] chars = input.toCharArray();
 
         int n = input.length();
-        int k = 0;
 
-        for (int row = 0; row < input.length(); row++) {
+        for (int row = 0; row < n; row++) {
 
             for (int column = 0; column < n-row; column++) {
 
@@ -41,7 +40,9 @@ public class CYK {
 
                 // X ij = X ik . X k+1 j
                 // X 11 = X 10 . X 11
-                X x = new X(row, column);
+                int r = table[row][column].getRowIndex();       //row index
+                int col = table[row][column].getColumnIndex();    //column index
+                X x = new X(col, r);
 
                 if (row == 0) {
                     for (Production production : productions) {
@@ -53,18 +54,26 @@ public class CYK {
                             acceptedProductions.add(production.getExpression());
                         }
                     }
+
+                    String accepted = acceptedProductions.toString();
+                    table[row][column].setProductions(accepted);
+
                 } else {
 
-                    x.product(new X(row, k), new X(k+1, column), table, productions);
-                    acceptedProductions.add(x.getProduction());
+                    //System.err.println(x);
+                    for (int k = col; k < col+r; k++) {
+                        String res = x.product(new X(col, k), new X(k+1, r), table, productions);
+                        if (res.replace("null", " ").trim().length() != 0) {
+                            acceptedProductions.add(res.replace("null", " ").trim());
+                        }
+                    }
+
+                    String accepted = acceptedProductions.toString();
+
+                    table[row][column].setProductions(accepted);
+
                 }
-
-
-
-                table[row][column].setProductions(acceptedProductions.toString());
             }
-
-            k++;
         }
 
         return table;

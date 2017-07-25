@@ -16,7 +16,7 @@ public class Main {
 
         int[][] table = new int[input.length()][input.length()];
 
-        CYK cyk = new CYK("S->AB|BA*A->a");
+        CYK cyk = new CYK("S->AB|BC*A->BA|a*B->CC|b*C->AB|a");
 
         ArrayList<Production> productions = ContextFreeGrammarParser.parseGrammar(cyk.getGrammar());
         for (int i = 0; i < productions.size(); i++) {
@@ -26,7 +26,7 @@ public class Main {
         Element[][] triangleTable = cyk.createTable(input, productions);
         for (int i = 0; i < input.length(); i++) {
             for (int j = 0; j < input.length(); j++) {
-                System.out.printf("%25s", triangleTable[i][j] + "\t");
+                System.out.printf("%35s", triangleTable[i][j] + "\t");
             }
             System.out.println("");
         }

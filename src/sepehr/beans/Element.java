@@ -37,7 +37,7 @@ public class Element {
     }
 
     public void setProductions(String productions) {
-        this.productions = productions;
+        this.productions = productions.trim();
     }
 
     @Override
