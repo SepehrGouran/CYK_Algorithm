@@ -13,7 +13,7 @@ public class Main {
 
         // Use '|' to add expression and '*' to separate productions
         // Use '#' for empty (Lambda) production
-        String grammar = "S->AB|BC*A->BA|a*B->CC|b*C->AB|a*C->#*B->B";
+        String grammar = "S->AB|BC*A->BA|a*B->CC|b*C->AB|a*C->#*B->B*A->B";
 
         CYK cyk = new CYK(grammar);
 

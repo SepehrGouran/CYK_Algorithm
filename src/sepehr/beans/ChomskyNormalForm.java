@@ -41,29 +41,74 @@ public class ChomskyNormalForm {
 
         ArrayList<Character> terminals = new ArrayList<>();
 
+        productions = removeNullableVariables(productions);
+        productions = removeRepetedProductions(productions);
+        productions = unitProductions(productions);
+        
+        
+        System.out.println(terminals.toString());
 
-        for(Iterator<Production> itr = productions.iterator(); itr.hasNext();) {
+        return productions;
+    }
+    
+    private static ArrayList<Production> removeNullableVariables(ArrayList<Production> productions) {
+    	
+    	for(Iterator<Production> itr = productions.iterator(); itr.hasNext();) {
             Production p = itr.next();
             // Remove nullable variables
             if (p.getSymbol().endsWith("#")) {
                 itr.remove();
             }
         }
-
-        for(Iterator<Production> itr = productions.iterator(); itr.hasNext();) {
+    	
+    	return productions;
+	}
+    
+    private static ArrayList<Production> removeRepetedProductions(ArrayList<Production> productions) {
+    	
+    	for(Iterator<Production> itr = productions.iterator(); itr.hasNext();) {
             // Unit Productions
             Production p = itr.next();
-            // Remove repeated productions
+            
             if (p.getSymbol().length()==1
-                    && p.getSymbol().equals(p.getSymbol().toUpperCase())
+                    && p.getSymbol().equals(p.getSymbol().toUpperCase()) 
                     && p.getExpression().equals(p.getSymbol())) {
-                itr.remove();
+            		itr.remove();			// Remove repeated productions
             }
         }
-
-
-        System.out.println(terminals.toString());
-
-        return productions;
-    }
+    	
+    	return productions;
+	}
+    
+    private static ArrayList<Production> unitProductions(ArrayList<Production> productions) {
+    	
+    	ArrayList<Production> unitProductions = new ArrayList<Production>();
+    	
+    	for(Iterator<Production> itr = productions.iterator(); itr.hasNext();) {
+            // Unit Productions
+            Production p = itr.next();
+            
+            if (p.getSymbol().length()==1
+                    && p.getSymbol().equals(p.getSymbol().toUpperCase())) {
+            	if (p.getExpression().equals(p.getSymbol())) {
+            		itr.remove();			// Remove repeated productions
+				} else {
+					// found p as unit production
+					Production unit = p;
+					for (Iterator<Production> itr2 = productions.iterator(); itr2.hasNext();) {
+						Production pro = itr2.next();
+						if (pro.getSymbol().contains(unit.getSymbol())) {
+							productions.add(new Production(pro.getExpression(), unit.getSymbol()));
+						}
+					}
+					
+					productions = removeRepetedProductions(productions);					
+				}
+            }
+        }
+    	
+    	unitProductions = removeRepetedProductions(productions);
+    	
+    	return unitProductions;
+	}
 }
