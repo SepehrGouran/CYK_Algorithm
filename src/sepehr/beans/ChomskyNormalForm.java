@@ -2,6 +2,7 @@ package sepehr.beans;
 
 import java.util.ArrayList;
 import java.util.Iterator;
+import java.util.stream.Collector;
 import java.util.stream.Collectors;
 
 /**
@@ -69,6 +70,8 @@ public class ChomskyNormalForm {
         ArrayList<Production> newVariables = newVariables(productions, terminals);
         productions = substituteNewVariables(productions, newVariables);
         productions.addAll(newVariables);
+
+        productions = intermediateVariables(productions);
 
         return productions;
     }
@@ -149,7 +152,7 @@ public class ChomskyNormalForm {
         ArrayList<Production> newVariables = new ArrayList<>();
 
         for (int i = 0; i < terminals.length; i++) {
-            Production p = new Production(String.format("%s%d", "T", ++counter), String.valueOf(terminals[i]));
+            Production p = new Production(String.format("%d", ++counter), String.valueOf(terminals[i]));
             newVariables.add(p);
         }
 
@@ -160,13 +163,56 @@ public class ChomskyNormalForm {
                                                                  ArrayList<Production> newVariables) {
 
         for (Production p : productions) {
-            for (Production n : newVariables) {
-                if (p.getSymbol().contains(n.getSymbol())) {
-                    p.getSymbol().replace(n.getSymbol(), n.getExpression());
-                }
-            }
+            newVariables.stream().filter(n -> p.getSymbol().contains(n.getSymbol())).forEach(n -> {
+                p.setSymbol(p.getSymbol().replaceAll(n.getSymbol(), n.getExpression()));
+            });
         }
 
         return productions;
+    }
+
+    private static ArrayList<Production> intermediateVariables (ArrayList<Production> productions) {
+
+        int counter = 0;
+
+
+        while (hasTwoVariables(productions) != null) {
+
+            String firsIndex = "";
+            String newVariable = "";
+
+            Production p = hasTwoVariables(productions);
+
+            //if (Character.isDigit(p.getSymbol().substring(1,2).charAt(0))) {
+            //    firsIndex = p.getSymbol().substring(0, 2);
+            //    newVariable = p.getSymbol().substring(2, p.getSymbol().length());
+            //} else {
+                firsIndex = p.getSymbol().substring(0, 1);
+                newVariable = p.getSymbol().substring(1, p.getSymbol().length());
+            //}
+
+            Production var = new Production(String.format("%d", ++counter), newVariable);
+            //productions.add(var);
+
+            p.setSymbol(firsIndex + var.getExpression());
+            //System.out.println("---->  " + firsIndex + " " + newVariable);
+            productions.add(var);
+        }
+
+
+        return productions;
+    }
+
+    private static Production hasTwoVariables (ArrayList<Production> productions) {
+
+        for (Production p : productions) {
+            String tmp = p.getSymbol();
+            //tmp = tmp.replaceAll("\\d", "");
+            if (tmp.length() > 2) {
+                return p;
+            }
+        }
+
+        return null;
     }
 }

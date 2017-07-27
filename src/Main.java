@@ -9,7 +9,7 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String input = "baaba";
+        String input = "aabaabca";
 
         // Use '|' to add expression and '*' to separate productions
         // Use '#' for empty (Lambda) production
@@ -31,13 +31,13 @@ public class Main {
         System.out.println(ChomskyNormalForm.toChomskyNormalForm(productions));
         //System.err.println(ChomskyNormalForm.isCNF(productions));
 
-        /*
+
         // Convert productions to Chomsky Normal Form
         ArrayList<Production> cnfProductions = ChomskyNormalForm.getChomskyNormalFormProductions(productions);
 
 
         // Create 2D array of Elements
-        Element[][] triangleTable = cyk.createTable(input, productions);
+        Element[][] triangleTable = cyk.createTable(input, cnfProductions);
         for (int i = 0; i < input.length(); i++) {
             for (int j = 0; j < input.length(); j++) {
                 System.out.printf("%10s", triangleTable[i][j] + "\t\n");
@@ -53,6 +53,6 @@ public class Main {
             System.err.println("The language is accepted " + lastElement.toString());
 
         }
-        */
+
     }
 }
