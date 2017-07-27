@@ -58,6 +58,18 @@ public class ChomskyNormalForm {
         }
         
         System.out.println("Unit Productions : " + unitProductions.toString());
+
+        /*
+         * TODO : find terminals and introduce new variables
+         * TODO : Replace new variables with terminals
+         * TODO : Break the productions until they have two variable and became chomsky normal form
+         */
+
+        char[] terminals = getTerminals(productions);
+        ArrayList<Production> newVariables = newVariables(productions, terminals);
+        productions = substituteNewVariables(productions, newVariables);
+        productions.addAll(newVariables);
+
         return productions;
     }
 
@@ -109,6 +121,51 @@ public class ChomskyNormalForm {
         productions.addAll(productions.stream().filter(
                 p -> p.getSymbol().contains(unitProduction.getExpression())).map(p -> new Production(p.getExpression(),
                 p.getSymbol().replace(unitProduction.getExpression(), unitProduction.getSymbol()))).collect(Collectors.toList()));
+
+        return productions;
+    }
+
+    private static char[] getTerminals (ArrayList<Production> productions) {
+
+        StringBuilder terminalsString = new StringBuilder();
+
+        for (Production p : productions) {
+            char[] chars = p.getSymbol().toCharArray();
+            for (int i = 0; i < chars.length; i++) {
+                if (Character.isLowerCase(chars[i])) {
+                    if (terminalsString.toString().indexOf(chars[i]) == -1 ) {
+                        terminalsString.append(chars[i]);
+                    }
+                }
+            }
+        }
+        System.err.println("Terminals : " + terminalsString.toString());
+        return terminalsString.toString().toCharArray();
+    }
+
+    private static ArrayList<Production> newVariables (ArrayList<Production> productions, char[] terminals) {
+
+        int counter = 0;
+        ArrayList<Production> newVariables = new ArrayList<>();
+
+        for (int i = 0; i < terminals.length; i++) {
+            Production p = new Production(String.format("%s%d", "T", ++counter), String.valueOf(terminals[i]));
+            newVariables.add(p);
+        }
+
+        return newVariables;
+    }
+
+    private static ArrayList<Production> substituteNewVariables (ArrayList<Production> productions,
+                                                                 ArrayList<Production> newVariables) {
+
+        for (Production p : productions) {
+            for (Production n : newVariables) {
+                if (p.getSymbol().contains(n.getSymbol())) {
+                    p.getSymbol().replace(n.getSymbol(), n.getExpression());
+                }
+            }
+        }
 
         return productions;
     }

@@ -13,10 +13,13 @@ public class Main {
 
         // Use '|' to add expression and '*' to separate productions
         // Use '#' for empty (Lambda) production
+        // Please do not add useless variable to grammar :D it does not support
+
         // String grammar = "S->AB|BC*A->BA|a*B->CC|b*C->AB|a*C->#*B->B*A->B";
-        String grammar = "S->aAB*A->aC*A->B*B->A*B->bb";
+        String grammar = "S->ABa*A->aab*B->Ac*C->#";
 
         CYK cyk = new CYK(grammar);
+
 
         // Convert to array of Productions
         ArrayList<Production> productions = ContextFreeGrammarParser.parseGrammar(cyk.getGrammar());
@@ -26,9 +29,9 @@ public class Main {
         }
 
         System.out.println(ChomskyNormalForm.toChomskyNormalForm(productions));
-        System.err.println(ChomskyNormalForm.isCNF(productions));
+        //System.err.println(ChomskyNormalForm.isCNF(productions));
 
-
+        /*
         // Convert productions to Chomsky Normal Form
         ArrayList<Production> cnfProductions = ChomskyNormalForm.getChomskyNormalFormProductions(productions);
 
@@ -50,6 +53,6 @@ public class Main {
             System.err.println("The language is accepted " + lastElement.toString());
 
         }
-
+        */
     }
 }
