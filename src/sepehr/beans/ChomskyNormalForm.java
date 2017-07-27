@@ -135,7 +135,7 @@ public class ChomskyNormalForm {
         for (Production p : productions) {
             char[] chars = p.getSymbol().toCharArray();
             for (int i = 0; i < chars.length; i++) {
-                if (Character.isLowerCase(chars[i])) {
+                if (Character.isLowerCase(chars[i]) && chars.length > 1) {
                     if (terminalsString.toString().indexOf(chars[i]) == -1 ) {
                         terminalsString.append(chars[i]);
                     }

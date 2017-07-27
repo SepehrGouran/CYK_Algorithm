@@ -9,14 +9,15 @@ public class Main {
 
     public static void main(String[] args) {
 
-        String input = "aabaabca";
+        String input = "abacac";
 
         // Use '|' to add expression and '*' to separate productions
         // Use '#' for empty (Lambda) production
         // Please do not add useless variable to grammar :D it does not support
 
         // String grammar = "S->AB|BC*A->BA|a*B->CC|b*C->AB|a*C->#*B->B*A->B";
-        String grammar = "S->ABa*A->aab*B->Ac*C->#";
+        // String grammar = "S->ABa*A->aab*B->Ac*C->#";
+        String grammar = "S->aBA*A->acC*B->b*C->ac";
 
         CYK cyk = new CYK(grammar);
 
