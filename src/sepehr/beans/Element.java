@@ -42,6 +42,6 @@ public class Element {
 
     @Override
     public String toString() {
-        return "index: " + rowIndex + " " + columnIndex + " P: " + productions.toString();
+        return "index: " + rowIndex + "   " + columnIndex + "      P: " + productions.toString();
     }
 }

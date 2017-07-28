@@ -1,6 +1,8 @@
 package sepehr.beans;
 
+import java.lang.reflect.Array;
 import java.util.ArrayList;
+import java.util.Arrays;
 import java.util.Iterator;
 import java.util.stream.Collector;
 import java.util.stream.Collectors;
@@ -67,7 +69,8 @@ public class ChomskyNormalForm {
          */
 
         char[] terminals = getTerminals(productions);
-        ArrayList<Production> newVariables = newVariables(productions, terminals);
+        System.err.println("Terminals : " + Arrays.toString(terminals));
+        ArrayList<Production> newVariables = newVariables(terminals);
         productions = substituteNewVariables(productions, newVariables);
         productions.addAll(newVariables);
 
@@ -106,6 +109,7 @@ public class ChomskyNormalForm {
     	for(Iterator<Production> itr = productions.iterator(); itr.hasNext();) {
             Production p = itr.next();
             if (p.getSymbol().length()==1
+                    && Character.isLetter(p.getSymbol().charAt(0))
                     && p.getSymbol().equals(p.getSymbol().toUpperCase())) {
             	if (p.getExpression().equals(p.getSymbol())) {
             		itr.remove();			// Remove repeated productions
@@ -142,17 +146,17 @@ public class ChomskyNormalForm {
                 }
             }
         }
-        System.err.println("Terminals : " + terminalsString.toString());
+
         return terminalsString.toString().toCharArray();
     }
 
-    private static ArrayList<Production> newVariables (ArrayList<Production> productions, char[] terminals) {
+    private static ArrayList<Production> newVariables (char[] terminals) {
 
         int counter = 0;
         ArrayList<Production> newVariables = new ArrayList<>();
 
         for (int i = 0; i < terminals.length; i++) {
-            Production p = new Production(String.format("%d", ++counter), String.valueOf(terminals[i]));
+            Production p = new Production(String.format("%s%d", "T", ++counter), String.valueOf(terminals[i]));
             newVariables.add(p);
         }
 
@@ -183,15 +187,15 @@ public class ChomskyNormalForm {
 
             Production p = hasTwoVariables(productions);
 
-            //if (Character.isDigit(p.getSymbol().substring(1,2).charAt(0))) {
-            //    firsIndex = p.getSymbol().substring(0, 2);
-            //    newVariable = p.getSymbol().substring(2, p.getSymbol().length());
-            //} else {
+            if (Character.isDigit(p.getSymbol().substring(1,2).charAt(0))) {
+                firsIndex = p.getSymbol().substring(0, 2);
+                newVariable = p.getSymbol().substring(2, p.getSymbol().length());
+            } else {
                 firsIndex = p.getSymbol().substring(0, 1);
                 newVariable = p.getSymbol().substring(1, p.getSymbol().length());
-            //}
+            }
 
-            Production var = new Production(String.format("%d", ++counter), newVariable);
+            Production var = new Production(String.format("%s%d", "V", ++counter), newVariable);
             //productions.add(var);
 
             p.setSymbol(firsIndex + var.getExpression());
@@ -207,7 +211,7 @@ public class ChomskyNormalForm {
 
         for (Production p : productions) {
             String tmp = p.getSymbol();
-            //tmp = tmp.replaceAll("\\d", "");
+            tmp = tmp.replaceAll("\\d", "");
             if (tmp.length() > 2) {
                 return p;
             }

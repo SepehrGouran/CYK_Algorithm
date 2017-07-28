@@ -12,7 +12,7 @@ public class ContextFreeGrammarParser {
 
         ArrayList<Production> productionsArray = new ArrayList<>();
 
-        String[] productions = grammar.split("\\*");
+        String[] productions = grammar.split("\\$");
         for (int i = 0; i < productions.length; i++) {
             String[] production = productions[i].split("->");
             String expression = production[0];

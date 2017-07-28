@@ -66,12 +66,46 @@ public class X {
                     String left = p1.getExpression();
                     String right = p2.getExpression();
 
-                    for (int k = 0; k < left.length(); k++) {
+                    int kLen = 0;
+                    int lLen = 0;
 
-                        for (int l = 0; l < right.length(); l++) {
+                    if (containDigit(left)) {
+                        kLen = left.length() - 1;
+                    } else {
+                        kLen = left.length();
+                    }
 
-                            String expression = left.substring(k, k+1) + right.substring(l, l+1);
-                            expressions.add(expression);
+                    if (containDigit(right)) {
+                        lLen = right.length() - 1;
+                    } else {
+                        lLen = right.length();
+                    }
+
+                    for (int k = 0; k < kLen; k++) {
+
+                        for (int l = 0; l < lLen; l++) {
+
+                            if (left.length() > 1 && Character.isDigit(left.charAt(1))
+                                    || right.length() > 1 && Character.isDigit(right.charAt(1))) {
+
+                                String leftExpression = left.substring(k, k+1);
+
+                                if (left.length() > 1 && Character.isDigit(left.charAt(1))) {
+                                    leftExpression = left.substring(k, k+2);
+                                }
+
+                                String rightExpression = right.substring(l, l+1);
+
+                                if (right.length() > 1 && Character.isDigit(right.charAt(1))) {
+
+                                    rightExpression = right.substring(l, l+2);
+                                }
+
+                                expressions.add(leftExpression + rightExpression);
+                            } else {
+                                String expression = left.substring(k, k + 1) + right.substring(l, l + 1);
+                                expressions.add(expression);
+                            }
                         }
                     }
 
@@ -103,5 +137,16 @@ public class X {
         }
 
         return null;
+    }
+
+    private boolean containDigit (String s) {
+
+        for (char c : s.toCharArray()) {
+            if (Character.isDigit(c)) {
+                return true;
+            }
+        }
+
+        return false;
     }
 }
