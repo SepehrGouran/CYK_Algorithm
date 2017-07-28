@@ -62,18 +62,15 @@ public class ChomskyNormalForm {
         
         System.out.println("Unit Productions : " + unitProductions.toString());
 
-        /*
-         * TODO : find terminals and introduce new variables
-         * TODO : Replace new variables with terminals
-         * TODO : Break the productions until they have two variable and became chomsky normal form
-         */
-
+        // Find all terminal variables
         char[] terminals = getTerminals(productions);
         System.err.println("Terminals : " + Arrays.toString(terminals));
+        // Get new variables that need to be defined
         ArrayList<Production> newVariables = newVariables(terminals);
         productions = substituteNewVariables(productions, newVariables);
         productions.addAll(newVariables);
 
+        // Resolve for intermediate variables
         productions = intermediateVariables(productions);
 
         return productions;
@@ -196,13 +193,10 @@ public class ChomskyNormalForm {
             }
 
             Production var = new Production(String.format("%s%d", "V", ++counter), newVariable);
-            //productions.add(var);
 
             p.setSymbol(firsIndex + var.getExpression());
-            //System.out.println("---->  " + firsIndex + " " + newVariable);
             productions.add(var);
         }
-
 
         return productions;
     }

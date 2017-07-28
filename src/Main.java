@@ -10,17 +10,27 @@ public class Main {
     public static void main(String[] args) throws InterruptedException {
 
         // Replace digits with a terminal variable
-        //String input = "(a-(a+a)*(a-a))+a";
-        String input = "a+a*a(a*)";
-
+        ArrayList<String> inputs = new ArrayList<>();
+        inputs.add("a+a*a(a*)");
+        inputs.add("(a-(a+a)*(a-a))+a");
         // Use '|' to add expression and '$' to separate productions
         // Use '#' for empty (Lambda) production
         // Please do not add useless variable to grammar :D it does not support
 
-        //String grammar = "S->AB|BC*A->BA|a*B->CC|b*C->AB|a*C->#*B->B";
-        //String grammar = "S->ABa*A->aab*B->Ac*C->#";
-        //String grammar = "S->aBA*A->acC*B->b*C->ac";
+        String grammar4 = "S->AB|BC$A->BA|a$B->CC|b$C->AB|a$C->#$B->B";
+        String grammar3 = "S->ABa$A->aab$B->Ac$C->#";
+        String grammar2 = "S->aBA$A->acC$B->b$C->ac";
         String grammar = "S->SAS|SBS|SCS|SDS|ESF|a$A->+$B->-$C->*$D->/$E->($F->)";
+
+        for (String input : inputs) {
+            run(grammar, input);
+        }
+
+        // Use run method for testing grammars and languages
+        run(grammar4, "baaba");
+    }
+
+    private static void run(String grammar, String input) throws InterruptedException {
 
         System.out.println("Grammar : " + grammar);
         System.out.println("Input language : " + input);
@@ -35,9 +45,9 @@ public class Main {
             System.out.println(productions.get(i).toString());
         }
 
+        // Print arrays of productions in Chomsky Normal Form
         System.out.println("\nChomsky Normal Form : \n" +
                 ChomskyNormalForm.toChomskyNormalForm(productions));
-        //System.err.println(ChomskyNormalForm.isCNF(productions));
 
 
         // Convert productions to Chomsky Normal Form
@@ -65,6 +75,5 @@ public class Main {
             System.err.println("The language is accepted " + lastElement.toString());
 
         }
-
     }
 }
